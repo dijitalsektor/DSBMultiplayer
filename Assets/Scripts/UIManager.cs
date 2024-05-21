@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,14 @@ public class UIManager : MonoBehaviour
 
     [SerializeField]
     private Button startClientBtn;
+
+    [SerializeField]
+    private TextMeshProUGUI playersInGameText;
+
+    private void Update()
+    {
+        playersInGameText.text = $"Players in game: {PlayersManager.Instance.PlayerCount.ToString()}";
+    }
 
     private void Start()
     {
@@ -54,4 +63,6 @@ public class UIManager : MonoBehaviour
             }
         });
     }
+
+    
 }

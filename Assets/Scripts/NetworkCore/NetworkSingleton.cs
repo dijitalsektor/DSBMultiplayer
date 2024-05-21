@@ -1,8 +1,6 @@
 ﻿using Unity.Netcode;
 using UnityEngine;
 
-namespace DilmerGames.Core.Singletons
-{
     public class NetworkSingleton<T> : NetworkBehaviour
         where T : Component
     {
@@ -31,4 +29,3 @@ namespace DilmerGames.Core.Singletons
             }
         }
     }
-}
