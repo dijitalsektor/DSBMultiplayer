@@ -25,7 +25,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (IsClient && IsOwner)
         {
-         
+
             transform.position = new Vector3(
                                             Random.Range(defaultSpawnPointRange.x, defaultSpawnPointRange.y),
                                             0,
@@ -50,6 +50,9 @@ public class PlayerController : NetworkBehaviour
 
     private void UpdateServer()
     {
+        transform.position = new Vector3(transform.position.x + leftRightPosition.Value,
+                                            transform.position.y,
+                                            transform.position.z + forwardBackPosition.Value);
 
     }
 
@@ -82,17 +85,17 @@ public class PlayerController : NetworkBehaviour
             oldForwardBackPosition = forwardBackward;
             oldLeftRightPosition = leftRight;
 
-            Debug.Log($" oldForwardBackPosition :  {oldForwardBackPosition} ,  oldLeftRightPosition:  {oldLeftRightPosition}");
             //update the server
-            //UpdateClientPositionServerRpc(forwardBackward, leftRight);
+            UpdateClientPositionServerRpc(forwardBackward, leftRight);
         }
 
 
     }
-
-
-
-
-
-
+    [ServerRpc]
+    private void UpdateClientPositionServerRpc(float forwardBackward, float leftRight)
+    {
+        Logger.Instance.LogInfo("gonderdik");
+        forwardBackPosition.Value = forwardBackward;
+        leftRightPosition.Value = leftRight;
+    }
 }

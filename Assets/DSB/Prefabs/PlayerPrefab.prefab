@@ -2289,6 +2289,7 @@ GameObject:
   - component: {fileID: 3299679706035262550}
   - component: {fileID: 8732028552648154567}
   - component: {fileID: 8039535383428167439}
+  - component: {fileID: 4061507825131891288}
   m_Layer: 8
   m_Name: PlayerPrefab
   m_TagString: Player
@@ -2408,6 +2409,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65792ef7502de242850abf26fb9fd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkSpeed: 0.02
+  defaultSpawnPointRange: {x: -4, y: 4}
+  forwardBackPosition:
+    m_InternalValue: 0
+  leftRightPosition:
+    m_InternalValue: 0
+--- !u!114 &4061507825131891288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7376791822986521298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &7432520921375632825
 GameObject:
   m_ObjectHideFlags: 0
