@@ -11,21 +11,21 @@ public class PlayerHUD : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if(IsServer)
+        if (IsServer)
         {
             playerName.Value = $"Player {OwnerClientId}";
         }
     }
 
 
-    public void SetOverlay() 
+    public void SetOverlay()
     {
-        localPlayerOverlayText.text=playerName.Value;
+        localPlayerOverlayText.text = playerName.Value;
     }
 
     private void Update()
     {
-        if(!overlaySet && string.IsNullOrEmpty(playerName.Value))
+        if (!overlaySet && !string.IsNullOrEmpty(playerName.Value))
         {
             SetOverlay();
             overlaySet = true;
