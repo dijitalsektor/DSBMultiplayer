@@ -2409,12 +2409,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a65792ef7502de242850abf26fb9fd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0.02
+  walkSpeed: 3.5
+  rotationSpeed: 3.5
   defaultSpawnPointRange: {x: -4, y: 4}
-  forwardBackPosition:
-    m_InternalValue: 0
-  leftRightPosition:
-    m_InternalValue: 0
+  networkPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  networkRotation:
+    m_InternalValue: {x: 0, y: 0, z: 0}
 --- !u!114 &4061507825131891288
 MonoBehaviour:
   m_ObjectHideFlags: 0

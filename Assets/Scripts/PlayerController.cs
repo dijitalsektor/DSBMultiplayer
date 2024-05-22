@@ -6,21 +6,33 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float walkSpeed = 0.02f;
 
+
+    [SerializeField]
+    private float rotationSpeed = 3.5f;
+
+
+
     [SerializeField]
     private Vector2 defaultSpawnPointRange = new Vector2(-4, 4);
 
 
     [SerializeField]
-    private NetworkVariable<float> forwardBackPosition = new NetworkVariable<float>();
+    private NetworkVariable<Vector3> networkPosition = new NetworkVariable<Vector3>();
 
     [SerializeField]
-    private NetworkVariable<float> leftRightPosition = new NetworkVariable<float>();
+    private NetworkVariable<Vector3> networkRotation = new NetworkVariable<Vector3>();
+
+    private CharacterController characterController;
 
     // client caching
-    private float oldForwardBackPosition;
-    private float oldLeftRightPosition;
+    private Vector3 oldInputPosition = Vector3.zero;
+    private Vector3 oldInputRotation = Vector3.zero;
 
+    private void Awake()
+    {
+        characterController = GetComponent<CharacterController>();
 
+    }
     private void Start()
     {
         if (IsClient && IsOwner)
@@ -37,65 +49,48 @@ public class PlayerController : NetworkBehaviour
 
     private void Update()
     {
-        if (IsServer)
-        {
-            UpdateServer();
-        }
-
         if (IsClient && IsOwner)
         {
-            UpdateClient();
+            ClientInput();
         }
+
+        ClientMoveAndRotate();
     }
 
-    private void UpdateServer()
+    private void ClientMoveAndRotate()
     {
-        transform.position = new Vector3(transform.position.x + leftRightPosition.Value,
-                                            transform.position.y,
-                                            transform.position.z + forwardBackPosition.Value);
-
+        if (networkPosition.Value != Vector3.zero)
+        {
+            characterController.SimpleMove(networkPosition.Value);
+        }
+        if (networkRotation.Value != Vector3.zero)
+        {
+            transform.Rotate(networkRotation.Value);
+        }
     }
 
-    private void UpdateClient()
+    private void ClientInput()
     {
+        // y axis client rotation
+        Vector3 inputRotation = new Vector3(0, Input.GetAxis("Horizontal"), 0);
 
-        float forwardBackward = 0;
-        float leftRight = 0;
+        // forward & backward direction
+        Vector3 direction = transform.TransformDirection(Vector3.forward);
+        float forwardInput = Input.GetAxis("Vertical");
+        Vector3 inputPosition = direction * forwardInput;
 
-        //getInput
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        if (oldInputPosition != inputPosition ||
+            oldInputRotation != inputRotation)
         {
-            forwardBackward += walkSpeed;
+            oldInputPosition = inputPosition;
+            UpdateClientPositionAndRotationServerRpc(inputPosition * walkSpeed, inputRotation * rotationSpeed);
         }
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            forwardBackward -= walkSpeed;
-        }
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            leftRight -= walkSpeed;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            leftRight += walkSpeed;
-        }
-
-        if (oldForwardBackPosition != forwardBackward || oldLeftRightPosition != leftRight)
-        {
-            oldForwardBackPosition = forwardBackward;
-            oldLeftRightPosition = leftRight;
-
-            //update the server
-            UpdateClientPositionServerRpc(forwardBackward, leftRight);
-        }
-
-
     }
+
     [ServerRpc]
-    private void UpdateClientPositionServerRpc(float forwardBackward, float leftRight)
+    public void UpdateClientPositionAndRotationServerRpc(Vector3 newPosition, Vector3 newRotation)
     {
-        Logger.Instance.LogInfo("gonderdik");
-        forwardBackPosition.Value = forwardBackward;
-        leftRightPosition.Value = leftRight;
+        networkPosition.Value = newPosition;
+        networkRotation.Value = newRotation;
     }
 }
