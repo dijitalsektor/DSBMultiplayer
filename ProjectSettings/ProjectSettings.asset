@@ -134,7 +134,8 @@ PlayerSettings:
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
   bundleVersion: 0.1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -913,11 +914,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 39586471-926a-4b1a-a4b5-ffbddb00f9a3
+  cloudProjectId: e79205fb-358f-414a-bad8-2585798bff5a
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: MultiplayerProjectDSB
-  organizationId: dijital-sekt-rde-ben-de-var-m
+  organizationId: devbatuhanluleci
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
