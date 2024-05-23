@@ -33,6 +33,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private NetworkVariable<PlayerState> networkPlayerState = new NetworkVariable<PlayerState>();
 
+    [SerializeField]
+    private Transform PlayerCameraRoot;
 
     private CharacterController characterController;
 
@@ -57,6 +59,8 @@ public class PlayerController : NetworkBehaviour
                                             0,
                                             Random.Range(defaultSpawnPointRange.x, defaultSpawnPointRange.y));
 
+
+            CameraController.Instance.AssignTargetObject(PlayerCameraRoot);
         }
 
     }
@@ -111,8 +115,9 @@ public class PlayerController : NetworkBehaviour
         if (oldInputPosition != inputPosition ||
             oldInputRotation != inputRotation)
         {
-            oldInputPosition = inputPosition;
             UpdateClientPositionAndRotationServerRpc(inputPosition * walkSpeed, inputRotation * rotationSpeed);
+            oldInputPosition = inputPosition;
+            oldInputRotation = inputRotation;
         }
 
         if (forwardInput > 0)

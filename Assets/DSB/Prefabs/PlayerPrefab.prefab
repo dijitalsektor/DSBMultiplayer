@@ -2411,12 +2411,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 3.5
-  rotationSpeed: 3.5
+  rotationSpeed: 2
   defaultSpawnPointRange: {x: -4, y: 4}
   networkPosition:
     m_InternalValue: {x: 0, y: 0, z: 0}
   networkRotation:
     m_InternalValue: {x: 0, y: 0, z: 0}
+  networkPlayerState:
+    m_InternalValue: 0
+  PlayerCameraRoot: {fileID: 1337625777558012567}
 --- !u!114 &4061507825131891288
 MonoBehaviour:
   m_ObjectHideFlags: 0
