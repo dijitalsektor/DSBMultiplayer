@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
+    public enum PlayerState
+    {
+        Idle,
+        Walk,
+        ReverseWalk,
+    }
+
     [SerializeField]
     private float walkSpeed = 0.02f;
 
@@ -22,16 +29,23 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private NetworkVariable<Vector3> networkRotation = new NetworkVariable<Vector3>();
 
+
+    [SerializeField]
+    private NetworkVariable<PlayerState> networkPlayerState = new NetworkVariable<PlayerState>();
+
+
     private CharacterController characterController;
 
     // client caching
     private Vector3 oldInputPosition = Vector3.zero;
     private Vector3 oldInputRotation = Vector3.zero;
 
+    private Animator animator;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
-
+        animator = GetComponent<Animator>();
     }
     private void Start()
     {
@@ -55,6 +69,7 @@ public class PlayerController : NetworkBehaviour
         }
 
         ClientMoveAndRotate();
+        ClientVisuals();
     }
 
     private void ClientMoveAndRotate()
@@ -68,7 +83,21 @@ public class PlayerController : NetworkBehaviour
             transform.Rotate(networkRotation.Value);
         }
     }
-
+    private void ClientVisuals()
+    {
+        if (networkPlayerState.Value == PlayerState.Walk)
+        {
+            animator.SetFloat("Walk", 1);
+        }
+        else if (networkPlayerState.Value == PlayerState.ReverseWalk)
+        {
+            animator.SetFloat("Walk", -1);
+        }
+        else
+        {
+            animator.SetFloat("Walk", 0);
+        }
+    }
     private void ClientInput()
     {
         // y axis client rotation
@@ -85,6 +114,19 @@ public class PlayerController : NetworkBehaviour
             oldInputPosition = inputPosition;
             UpdateClientPositionAndRotationServerRpc(inputPosition * walkSpeed, inputRotation * rotationSpeed);
         }
+
+        if (forwardInput > 0)
+        {
+            UpdatePlayerStateServerRpc(PlayerState.Walk);
+        }
+        else if (forwardInput < 0)
+        {
+            UpdatePlayerStateServerRpc(PlayerState.ReverseWalk);
+        }
+        else
+        {
+            UpdatePlayerStateServerRpc(PlayerState.Idle);
+        }
     }
 
     [ServerRpc]
@@ -92,5 +134,11 @@ public class PlayerController : NetworkBehaviour
     {
         networkPosition.Value = newPosition;
         networkRotation.Value = newRotation;
+    }
+
+    [ServerRpc]
+    public void UpdatePlayerStateServerRpc(PlayerState state)
+    {
+        networkPlayerState.Value = state;
     }
 }
