@@ -84,7 +84,7 @@ public class PlayerController : NetworkBehaviour
         }
         if (networkRotation.Value != Vector3.zero)
         {
-            transform.Rotate(networkRotation.Value);
+            transform.Rotate(networkRotation.Value,Space.World);
         }
     }
     private void ClientVisuals()
