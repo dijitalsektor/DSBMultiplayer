@@ -17,6 +17,9 @@ public class UIManager : Singleton<UIManager>
     private Button startClientBtn;
 
     [SerializeField]
+    private Button spawnPhysicObjects;
+
+    [SerializeField]
     private TextMeshProUGUI playersInGameText;
 
     [SerializeField]
@@ -26,7 +29,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField]
     private TMP_InputField nicknameInput;
 
-
+    private bool hasServerStarted;
     private void Awake()
     {
         Cursor.visible = true;
@@ -90,7 +93,27 @@ public class UIManager : Singleton<UIManager>
                 Logger.Instance.LogError("Error while starting the Host");
             }
         });
+
+        NetworkManager.Singleton.OnServerStarted += Singleton_OnServerStarted;
+
+
+        spawnPhysicObjects.onClick.AddListener(() => 
+        {
+        
+            if(!hasServerStarted)
+            {
+                Logger.Instance.LogWarning("Server has not started");
+                return;
+            }
+
+            SpawnerController.Instance.SpawnObjects();
+        
+        
+        });
     }
 
-    
+    private void Singleton_OnServerStarted()
+    {
+        hasServerStarted=true;
+    }
 }
