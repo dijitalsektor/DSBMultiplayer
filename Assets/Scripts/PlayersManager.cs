@@ -12,15 +12,20 @@ public class PlayersManager : NetworkSingleton<PlayersManager>
 
     private void Start()
     {
-        NetworkManager.Singleton.OnClientConnectedCallback += (id) =>
+        if (IsServer)
         {
-            playersCount.Value++;
-            Logger.Instance.LogInfo($"Player {id} is connected.");
-        };
-        NetworkManager.Singleton.OnClientDisconnectCallback += (id) =>
-        {
-            playersCount.Value--;
-            Logger.Instance.LogInfo($"Player {id} is disconnected.");
-        };
+
+            NetworkManager.Singleton.OnClientConnectedCallback += (id) =>
+            {
+                playersCount.Value++;
+                Logger.Instance.LogInfo($"Player {id} is connected.");
+            };
+            NetworkManager.Singleton.OnClientDisconnectCallback += (id) =>
+            {
+                playersCount.Value--;
+                Logger.Instance.LogInfo($"Player {id} is disconnected.");
+            };
+        }
+
     }
 }

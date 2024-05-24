@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -11,12 +11,25 @@ public class PlayerHUD : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
+        if (IsClient && IsOwner)
         {
-            playerName.Value = $"Player {OwnerClientId}";
+            SendNicknameServerRpc(UIManager.Instance.ReadNickName());
+
         }
+
+        //if (IsServer)
+        //{
+        //    playerName.Value = $"Player {OwnerClientId}";
+        //}
     }
 
+
+    [ServerRpc]
+    private void SendNicknameServerRpc(string nickName)
+    {
+        playerName.Value = nickName;
+
+    }
 
     public void SetOverlay()
     {

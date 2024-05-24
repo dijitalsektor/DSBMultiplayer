@@ -22,6 +22,11 @@ public class UIManager : Singleton<UIManager>
     [SerializeField]
     private TMP_InputField joinCodeInput;
 
+
+    [SerializeField]
+    private TMP_InputField nicknameInput;
+
+
     private void Awake()
     {
         Cursor.visible = true;
@@ -30,6 +35,11 @@ public class UIManager : Singleton<UIManager>
     {
 
         playersInGameText.text = $"Players in game: {PlayersManager.Instance.PlayerCount.ToString()}";
+    }
+
+    public string ReadNickName()
+    {
+        return nicknameInput.text;
     }
 
     private void Start()
